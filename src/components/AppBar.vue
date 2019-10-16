@@ -7,8 +7,8 @@
       fixed
     >
       <v-toolbar-title >
-        <span class="lombok">LOMBOK </span> 
-        <span class="bersih"><u>BERSIH</u> </span>   
+        <span  class="lombok">LOMBOK </span> 
+        <span class="bersih">BERSIH </span>   
         </v-toolbar-title>
       <div class="flex-grow-1"></div>
       
@@ -43,10 +43,10 @@
         slider-size="3"
         background-color="transparent"
         >
-          <v-tab to="/">Pembayaran</v-tab>
-          <v-tab to="/about">Tagihan</v-tab>
+          <v-tab to="/pembayaran">Pembayaran</v-tab>
+          <v-tab to="/tagihan">Tagihan</v-tab>
           <v-tab to="/pelanggan">Pelanggan</v-tab>
-          <v-tab>Rekapitulasi </v-tab>
+          <v-tab to="/laporan">Laporan </v-tab>
           <v-tab to="/master">Master </v-tab>
           </v-tabs>     
       </template> 
@@ -61,13 +61,6 @@
         month : ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
         tanggal : '',
         drawer : false,
-        items: [
-          { title: 'Pembayaran', icon: 'payment', link : '/' },
-          { title: 'Tagihan', icon : 'payment', link : '/tagihan'},
-          { title: 'Master data', icon: 'people', link : '/master' },
-          { title: 'About', icon: 'mdi-help-box', link : '/about' },
-          
-        ],
         right: null,
       }
     },
@@ -85,8 +78,9 @@
   .ctr{
     margin: auto;
   }
-  .lombok{
+    .lombok{
     font-family: 'Sedgwick Ave Display', cursive;
+    color: rgba(0, 149, 255, 0.87);
   
   }
   .bersih{

@@ -1,15 +1,16 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBAHgxv0xTm9njn2qI4UVadNPNHaL2nyXs",
-    authDomain: "lombok-bersih.firebaseapp.com",
-    databaseURL: "https://lombok-bersih.firebaseio.com",
-    projectId: "lombok-bersih",
-    storageBucket: "lombok-bersih.appspot.com",
-    messagingSenderId: "675176896011",
-    appId: "1:675176896011:web:1372c15a160fc418"
-  };
+	apiKey: "AIzaSyB76BlZtGeDjy8ojrc6EWSswS6TqjWUNQg",
+	authDomain: "lombok-bersih-2982f.firebaseapp.com",
+	databaseURL: "https://lombok-bersih-2982f.firebaseio.com",
+	projectId: "lombok-bersih-2982f",
+	storageBucket: "lombok-bersih-2982f.appspot.com",
+	messagingSenderId: "247713493276",
+	appId: "1:247713493276:web:13ae805469054eae1b0ad9",
+	measurementId: "G-6ZCE5V1Y4E"
+};
 
-  firebase.initializeApp(firebaseConfig)
-  export default firebase.firestore()
+firebase.initializeApp(firebaseConfig);
+export default firebase.firestore();

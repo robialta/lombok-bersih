@@ -1,6 +1,6 @@
 <template>
   <v-app >
-    <AppBar></AppBar>  
+    <!-- <AppBar></AppBar>   -->
     <v-content>
       <div class="content-wrap">
         <router-view></router-view>
