@@ -282,11 +282,50 @@
 								<v-list-item-content>
 									<v-list-item-subtitle>Nama pelanggan</v-list-item-subtitle>
 									<v-list-item-title><strong>{{selectedPelanggan.nama}}</strong></v-list-item-title> 
-					
+                                    <v-list-item-subtitle>NIK</v-list-item-subtitle>
+									<v-list-item-title><strong>{{selectedPelanggan.nik}}</strong></v-list-item-title> 
+                                    <v-list-item-subtitle>Telepon</v-list-item-subtitle>
+									<v-list-item-title>
+                                        <v-icon class="blue--text">
+                                            phone
+                                        </v-icon>
+                                        <strong> {{selectedPelanggan.telepon}}</strong></v-list-item-title> 
 								</v-list-item-content>
 								<v-list-item-content>
 									<v-list-item-subtitle>Dusun</v-list-item-subtitle>
-									<v-list-item-title>{{selectedPelanggan.dusun}}</v-list-item-title>	
+									<v-list-item-title><strong>{{selectedPelanggan.dusun}}</strong></v-list-item-title>	
+                                    <v-list-item-subtitle>RT</v-list-item-subtitle>
+									<v-list-item-title>                               
+                                        <strong>0{{selectedPelanggan.rt}}</strong>
+                                    </v-list-item-title>
+                                    <v-list-item-subtitle>Jenis</v-list-item-subtitle>
+									<v-list-item-title>
+                                        <v-icon
+                                            v-if="selectedPelanggan.jenis=='Toko'"
+                                            class="blue--text"
+                                            v-text="'storefront'"
+                                        ></v-icon>
+                                        <v-icon
+                                            v-else-if="selectedPelanggan.jenis=='Rumah'"
+                                            class="blue--text"
+                                            v-text="'home'"
+                                        ></v-icon>
+                                        <v-icon
+                                            v-else-if="selectedPelanggan.jenis=='Kantor'"
+                                            class="blue--text"
+                                            v-text="'location_city'"
+                                        ></v-icon>
+                                        <v-icon
+                                            v-else-if="selectedPelanggan.jenis=='Sekolah'"
+                                            class="blue--text"
+                                            v-text="'school'"
+                                        ></v-icon>
+                                        <v-icon
+                                            v-else
+                                            class="blue--text"
+                                            v-text="'minimize'"
+                                        ></v-icon>
+                                        <strong> {{selectedPelanggan.jenis}}</strong></v-list-item-title>	
 								</v-list-item-content>
 								
 							</v-list-item>

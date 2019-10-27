@@ -10,12 +10,11 @@
 </template>
 
 <script>
-import AppBar from './components/AppBar'
-import Pelanggan from './components/Pelanggan'
+
 export default {
   name: 'App',
   components: {
-    AppBar
+
   },
   data: () => ({
    }),

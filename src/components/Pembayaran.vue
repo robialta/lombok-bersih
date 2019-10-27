@@ -146,7 +146,9 @@
 										@click="setSort">									
 										<v-icon left>sort</v-icon>
 										<v-icon left>sort_by_alpha</v-icon>
-									</v-btn>							
+									</v-btn>		
+
+									<!-- ===================================== Dialog Tambah pembayaran ==================== -->
 									<v-dialog persistent required v-model="dialog" width="500" style="max-heigh:500px">
 										<template v-slot:activator="{ on }">
 											<v-btn class="mx-1 mb-3 blue-grey lighten-5 blue-grey--text" small depressed v-on="on">
@@ -168,7 +170,7 @@
 													<v-col>
 														<v-text-field
 															@keyup="cariPembayar"
-															@dragleave="tampilListPembayar=false"
+															@dragleave="munculListPembayar=false"
 															v-model="anggotadicari"
 															clearable
 															@click:clear="deletePembayar"
@@ -448,8 +450,6 @@ export default {
 					this.anggotadicari = "";
 					this.detail_pembayaran = ""
 					this.deletePembayar()
-				}).catch(err=>{
-					console.log(err)
 				})
 	
 		},
@@ -513,7 +513,6 @@ export default {
 						pembayaran_terakhir: doc.data().pembayaran_terakhir,
 						tanggal_masuk: doc.data().tanggal_masuk,
 						pembayaran: arrpembayaran,
-						lunas : doc.data().lunas
 					};
 					arrTampungan.push(dd);
 				});
