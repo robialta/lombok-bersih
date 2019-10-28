@@ -109,7 +109,7 @@
                         v-show="munculListPembayar"
                         class="mx-auto py-2 text-left"
                         max-height="200"
-                        style="overflow:auto;position:absolute;width:;left:24px;right:24px"
+                        style="overflow:auto;position:absolute;width:;left:24px;right:24px;z-index:98"
                         tile
                         id="style-2"
                     >
@@ -197,66 +197,46 @@
 							<v-toolbar-title>Detail pembayaran pelanggan</v-toolbar-title>
 							<div class="flex-grow-1"></div>
 						</v-toolbar>
-						<v-list three-line subheader>
-							<v-list-item>
-								<v-list-item-content>
-									<v-list-item-subtitle>Nama pelanggan</v-list-item-subtitle>
-									<v-list-item-title><strong>{{selectedPelanggan.nama}}</strong></v-list-item-title> 
-                                    <v-list-item-subtitle>NIK</v-list-item-subtitle>
-									<v-list-item-title><strong>{{selectedPelanggan.nik}}</strong></v-list-item-title> 
-                                    <v-list-item-subtitle>Telepon</v-list-item-subtitle>
-									<v-list-item-title>
-                                        <v-icon class="blue--text">
-                                            phone
-                                        </v-icon>
-                                        <strong> {{selectedPelanggan.telepon}}</strong></v-list-item-title> 
-								</v-list-item-content>
-								<v-list-item-content>
-									<v-list-item-subtitle>Dusun</v-list-item-subtitle>
-									<v-list-item-title><strong>{{selectedPelanggan.dusun}}</strong></v-list-item-title>	
-                                    <v-list-item-subtitle>RT</v-list-item-subtitle>
-									<v-list-item-title>                               
-                                        <strong>0{{selectedPelanggan.rt}}</strong>
-                                    </v-list-item-title>
-                                    <v-list-item-subtitle>Jenis</v-list-item-subtitle>
-									<v-list-item-title>
-                                        <v-icon
-                                            v-if="selectedPelanggan.jenis=='Toko'"
-                                            class="blue--text"
-                                            v-text="'storefront'"
-                                        ></v-icon>
-                                        <v-icon
-                                            v-else-if="selectedPelanggan.jenis=='Rumah'"
-                                            class="blue--text"
-                                            v-text="'home'"
-                                        ></v-icon>
-                                        <v-icon
-                                            v-else-if="selectedPelanggan.jenis=='Kantor'"
-                                            class="blue--text"
-                                            v-text="'location_city'"
-                                        ></v-icon>
-                                        <v-icon
-                                            v-else-if="selectedPelanggan.jenis=='Sekolah'"
-                                            class="blue--text"
-                                            v-text="'school'"
-                                        ></v-icon>
-                                        <v-icon
-                                            v-else
-                                            class="blue--text"
-                                            v-text="'minimize'"
-                                        ></v-icon>
-                                        <strong> {{selectedPelanggan.jenis}}</strong></v-list-item-title>	
-								</v-list-item-content>
-								
-							</v-list-item>
-						</v-list>
-						<v-divider></v-divider>
+						<v-subheader>Data pelanggan</v-subheader>	
+						<v-card max-width="500" outlined class="mx-4 my-1" >
+							<v-simple-table  dense>
+							<template v-slot:default>
+							<tbody>
+								<tr>
+									<td>NIK</td>
+									<td>: {{ selectedPelanggan.nik }}</td>
+								</tr>
+								<tr>
+									<td>Nama</td>
+									<td>: {{selectedPelanggan.nama }}</td>
+								</tr>
+								<tr>
+									<td>Dusun</td>
+									<td>: {{ selectedPelanggan.dusun }}</td>
+								</tr>
+								<tr>
+									<td>RT</td>
+									<td>: 0{{ selectedPelanggan.rt }}</td>
+								</tr>
+								<tr>
+									<td>Telepon</td>
+									<td>: {{ selectedPelanggan.telepon }}</td>
+								</tr>
+								<tr>
+									<td>Jenis</td>
+									<td>: {{ selectedPelanggan.jenis }}</td>
+								</tr>
+							</tbody>
+							</template>
+						</v-simple-table>
+						</v-card>
+
 						<v-list three-line subheader>
 							<v-subheader>Sejarah pembayaran</v-subheader>
 							<v-list-item>
-								<v-list-item-content>
+								<v-list-item-content class="py-1">
 									<v-row justify="start" align="start">									
-										<v-col cols="12"  sm="4"  md="2" v-for="(p, index) in selectedPelanggan.pembayaran" :key="index">
+										<v-col class="py-1" cols="12"  sm="4"  md="2" v-for="(p, index) in selectedPelanggan.pembayaran" :key="index">
 											<v-card
 											outlined										
 											>
@@ -270,7 +250,7 @@
 												</v-list-item>
 											</v-card>
 										</v-col>	
-										<v-col cols="12"  sm="4"  md="2" >
+										<v-col class="py-1" cols="12"  sm="4"  md="2" >
 											<v-card
 											color="grey lighten-3"
 											outlined																				

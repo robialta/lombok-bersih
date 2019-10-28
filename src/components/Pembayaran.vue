@@ -39,9 +39,9 @@
 						<v-list three-line subheader>
 							<v-subheader>Sejarah pembayaran</v-subheader>
 							<v-list-item>
-								<v-list-item-content>
+								<v-list-item-content class="py-1">
 									<v-row justify="start" align="start">
-										<v-col cols="12"  sm="4"  md="2" v-for="(p, index) in selectedPelanggan.pembayaran" :key="index">
+										<v-col class="py-1" cols="12"  sm="4"  md="2" v-for="(p, index) in selectedPelanggan.pembayaran" :key="index">
 											<v-card
 											outlined										
 											>
@@ -55,7 +55,7 @@
 												</v-list-item>
 											</v-card>
 										</v-col>	
-										<v-col cols="12"  sm="4"  md="2" >
+										<v-col class="py-1" cols="12"  sm="4"  md="2" >
 											<v-card
 											color="grey lighten-3"
 											outlined																				
