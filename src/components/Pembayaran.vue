@@ -1,6 +1,6 @@
 <template>
 	<div>
-	<AppBar></AppBar>
+		<AppBar></AppBar>
 		<div class="dashboard">
 			<!-- Loader -->
 			<div class="loading-wrap text-center" v-show="show">
@@ -48,7 +48,7 @@
 												<v-list-item three-line>
 												<v-list-item-content>
 													<div class="subtitle-2 ">{{p.bulan}} {{p.tahun}}</div>
-													<v-list-item-title v-if="p.lunas" class="headline mb-1">LUNAS</v-list-item-title>
+													<v-list-item-title v-if="p.lunas" class="headline mb-1">Rp. {{p.harga}}</v-list-item-title>
 													<v-list-item-title v-else class="headline mb-1">Belum dibayar</v-list-item-title>
 													<v-list-item-subtitle class="caption text-right">{{formatTanggal(p.tanggal_bayar)}}</v-list-item-subtitle>
 												</v-list-item-content>
@@ -146,7 +146,8 @@
 										@click="setSort">									
 										<v-icon left>sort</v-icon>
 										<v-icon left>sort_by_alpha</v-icon>
-									</v-btn>		
+									</v-btn>	
+
 
 									<!-- ===================================== Dialog Tambah pembayaran ==================== -->
 									<v-dialog persistent required v-model="dialog" width="500" style="max-heigh:500px">
@@ -217,8 +218,21 @@
 															:items="bulan_tersedia"
 															label="Bulan"
 															solo
-															@change="hitungTotal"
+															v-on:change="hitungTotal"
 														></v-select>
+													</v-col>
+												</v-row>
+												<v-row>
+													<v-col class="py-0">
+														<v-text-field
+															v-model="harga"
+															background-color="blue-grey lighten-5"
+															flat
+															height="15"
+															label="Jumlah bayar"
+															solo
+															@keyup="hitungTotal"
+														></v-text-field>
 													</v-col>
 												</v-row>
 												<v-row>
@@ -310,6 +324,9 @@
 											<v-btn color="primary" @click="showDetail(d)" class="mr-4" fab x-small outlined>
 												<v-icon>info</v-icon>
 											</v-btn>
+											<v-btn color="red" @click="cancelPembayaran(d)" class="mr-4" fab x-small outlined>
+												<v-icon>info</v-icon>
+											</v-btn>
 										</v-flex>
 									</v-layout>
 									<v-divider></v-divider>
@@ -340,6 +357,7 @@ export default {
 	data() {
 		return {
 			harga : null,
+			hargaKhusus : null,
 			disabledbtn: true,
 			show: false,
 			loader: false,
@@ -350,7 +368,7 @@ export default {
 			snackText: "",
 			anggotaTerpilih: "",
 			showPicker: false,
-			picker: new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+10).toISOString().substr(0, 10),
+			picker: new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()).toISOString().substr(0, 10),
 			dialog: false,
 			sort : false,
 			search: "",
@@ -368,7 +386,7 @@ export default {
 			pembayar: [],
 			alert_pembayaran :false,
 			detail_pembayaran : "",
-			jumlah_pembayaran : '',
+			jumlah_pembayaran : null,
 			detail : false,
 			selectedPelanggan : [],
 			tahun : new Date().getFullYear(),
@@ -396,12 +414,12 @@ export default {
 		},
 		setSort(){
 			this.filterBintang = false
-			var arrHelper = JSON.parse(JSON.stringify(this.data_pelanggan))
+			var arrHelper = JSON.parse(JSON.stringify(this.filterQuery(this.data_pelanggan, this.ambilNamaBulan(this.bulan_pembayaran))))
 			this.sort = !this.sort
 			if(this.sort == true){
 				this.data_tampil = JSON.parse(JSON.stringify(arrHelper.sort((a,b) => (a.nama > b.nama) ? 1 : ((b.nama > a.nama) ? -1 : 0))))
 			}else{
-				this.data_tampil = JSON.parse(JSON.stringify(this.data_pelanggan))
+				this.data_tampil = JSON.parse(JSON.stringify(this.filterQuery(this.data_pelanggan, this.ambilNamaBulan(this.bulan_pembayaran))))
 			}
 		},
 		setTanggal() {
@@ -449,9 +467,27 @@ export default {
 					this.anggotaTerpilih = "";
 					this.anggotadicari = "";
 					this.detail_pembayaran = ""
+					this.jumlah_pembayaran = null
 					this.deletePembayar()
 				})
 	
+		},
+		cancelPembayaran(p){
+			var pembayaranTerakhir = p.pembayaran[p.pembayaran.length-1]
+			// console.log(pembayaranTerakhir)
+			var ref = db.collection('pelanggan').doc(p.id)
+			ref.update({
+				'pembayaran' : firebase.firestore.FieldValue.arrayRemove({
+						"tahun": pembayaranTerakhir.tahun,
+						"no_bulan": pembayaranTerakhir.no_bulan,
+
+					})
+			}).then(() => {
+				console.log('Berhasil')
+			}).catch((err) => {
+				console.log(err)
+			})
+			
 		},
 		searching() {
 			var an = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
@@ -496,7 +532,8 @@ export default {
 							bulan: el.bulan,
 							no_bulan: el.no_bulan,
 							lunas: el.lunas,
-							tanggal_bayar: el.tanggal_bayar
+							tanggal_bayar: el.tanggal_bayar,
+							harga : el.harga
 						};
 						arrpembayaran.push(pb);
 					});
@@ -523,18 +560,18 @@ export default {
 					}else if(this.dusun != 'Semua dusun' && this.rt != 'Semua rt' ){
 						this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun && p['rt'] == this.rt)
 					}
-				this.data_pembayaran = this.filterQuery(this.data_pelanggan,this.ambilNamaBulan(this.bulan_pembayaran), true)		
+				this.data_pembayaran = this.filterQuery(this.data_pelanggan, this.ambilNamaBulan(this.bulan_pembayaran))		
 				this.data_tampil = this.data_pembayaran		
 				this.show = false;
 				this.sort = false
 			});
 		
 		},
-		filterQuery(arr, bulan, kondisi) {
+		filterQuery(arr, bulan) {
 			var hasilFilter = [];
 			arr.forEach((e, i) => {
 				e.pembayaran.forEach(el => {
-					if (el.bulan == bulan && el.lunas == kondisi && el.tahun == new Date().getFullYear()) {
+					if (el.bulan == bulan && el.tahun == new Date().getFullYear()) {
 						hasilFilter.push(arr[i]);
 					}
 				});
@@ -624,7 +661,7 @@ export default {
 			}
 		},
 		pilihPembayar(pelanggan) {
-			this.anggotadicari = pelanggan.nama;
+			this.anggotadicari = pelanggan.nama+' - '+pelanggan.jenis;
 			this.munculListPembayar = false;
 			this.pembayar = [];
 			this.anggotaTerpilih = pelanggan;
@@ -647,6 +684,8 @@ export default {
 			this.pembayar = [];
 			this.anggotaTerpilih = "";
 			this.alert_pembayaran=false
+			this.jumlah_pembayaran = null
+			this.harga = null
 		},
 		queryHarga(){
 			db.collection('iuran').where('nama', '==', this.anggotaTerpilih.jenis).get().then(querysnapshot=>{
@@ -657,14 +696,16 @@ export default {
 		},
 		hitungTotal(){		
 			var total = this.harga * this.bulan_terpilih[1]
-			this.detail_pembayaran = "Periode pembayaran sampai bulan "+this.ambilNamaBulan(this.bulan_terpilih[1]>=12?this.bulan_terpilih[1]-12:this.bulan_terpilih[1])+" "+this.bulan_terpilih[2]+" dengan total: Rp."
+			this.detail_pembayaran = "Periode pembayaran sampai bulan "+this.ambilNamaBulan(this.bulan_terpilih[0]>=12?this.bulan_terpilih[0]-12:this.bulan_terpilih[0])+" "+this.bulan_terpilih[2]+" dengan total: Rp."
 			this.jumlah_pembayaran = total
 			this.alert_pembayaran = true
 			this.disabledbtn = false
+
 		},
 		showDetail(pelanggan){
-			var pel = pelanggan
-			pel.pembayaran = pelanggan.pembayaran.reverse()
+			var p = JSON.parse(JSON.stringify(pelanggan)) 
+			var pel = p
+			pel.pembayaran = p.pembayaran.reverse()
 			this.selectedPelanggan = pel
 			this.detail = true
 		},
@@ -707,18 +748,4 @@ export default {
 	border-top: 0.5px solid rgba(0, 0, 0, 0.336);
 }
 
-#style-2::-webkit-scrollbar-track {
-	border-radius: 10px;
-	background-color: #f5f5f5;
-}
-
-#style-2::-webkit-scrollbar {
-	width: 10px;
-	background-color: #f5f5f5;
-}
-
-#style-2::-webkit-scrollbar-thumb {
-	border-radius: 10px;
-	background-color: #e0e0e0;
-}
 </style>

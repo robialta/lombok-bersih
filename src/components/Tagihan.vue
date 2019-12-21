@@ -51,7 +51,7 @@
 												<v-list-item three-line>
 												<v-list-item-content>
 													<div class="subtitle-2 ">{{p.bulan}} {{p.tahun}}</div>
-													<v-list-item-title v-if="p.lunas" class="headline mb-1">LUNAS</v-list-item-title>
+													<v-list-item-title v-if="p.lunas" class="headline mb-1">Rp. {{p.harga}}</v-list-item-title>
 													<v-list-item-title v-else class="headline mb-1">Belum dibayar</v-list-item-title>
 													<v-list-item-subtitle class="caption text-right">{{formatTanggal(p.tanggal_bayar)}}</v-list-item-subtitle>
 												</v-list-item-content>
@@ -333,7 +333,6 @@ import db from "./../firebase";
 		data_pelanggan : [],
 		data_tagihan : [],
 		data_tampil : [],
-		dusuns : [],
 		snackbar : false,
 		snackText : "",
 		detail_pembayaran : "",
@@ -364,7 +363,8 @@ import db from "./../firebase";
 							bulan: el.bulan,
 							no_bulan: el.no_bulan,
 							lunas: el.lunas,
-							tanggal_bayar: el.tanggal_bayar
+							tanggal_bayar: el.tanggal_bayar,
+							harga : el.harga
 						};
 						arrpembayaran.push(pb);
 					});
@@ -452,8 +452,9 @@ import db from "./../firebase";
 			return hasilFilter;
 		},
 		showDetail(pelanggan){
-			var pel = pelanggan
-			pel.pembayaran = pelanggan.pembayaran.reverse()
+			var p = JSON.parse(JSON.stringify(pelanggan)) 
+			var pel = p
+			pel.pembayaran = p.pembayaran.reverse()
 			this.selectedPelanggan = pel
 			this.detail = true
 		},
@@ -500,5 +501,8 @@ import db from "./../firebase";
 	height: 110%;
 	background: #ffffffde;
 	padding-top: 300px;
+}
+.tagihan {
+	border-top: 0.5px solid rgba(0, 0, 0, 0.336);
 }
 </style>

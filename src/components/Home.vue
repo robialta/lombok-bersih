@@ -323,7 +323,6 @@ export default {
 						pembayaran_terakhir: doc.data().pembayaran_terakhir,
 						tanggal_masuk: doc.data().tanggal_masuk,
 						pembayaran: arrpembayaran,
-						lunas : doc.data().lunas
 					};
 					arrTampungan.push(dd);
 				});

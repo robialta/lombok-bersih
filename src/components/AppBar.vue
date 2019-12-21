@@ -24,12 +24,11 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item
-            v-for="n in 5"
-            :key="n"
-            @click="() => {}"
-          >
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
+          <v-list-item>
+            <v-list-item-title v-if="user!=null">{{user.nama}}</v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title><router-link to="/logout">Logout</router-link></v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -45,27 +44,56 @@
         >
           <v-tab to="/pembayaran">Pembayaran</v-tab>
           <v-tab to="/tagihan">Tagihan</v-tab>
-          <v-tab to="/pelanggan">Pelanggan</v-tab>
+          <v-tab  to="/pelanggan">Pelanggan</v-tab>
           <v-tab to="/laporan">Laporan </v-tab>
-          <v-tab to="/master">Master </v-tab>
-          </v-tabs>     
+          <v-tab to="/Rekap">Rekap </v-tab>
+          <v-tab v-show="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb 8uy48 3KIUJ(*_HUHyuh*8uh9YT*y7y8y89yYh9y98">Master </v-tab>
+          
+        </v-tabs>     
       </template> 
     </v-app-bar> 
   </div>
 </template>
 
 <script>
+  import firebase from 'firebase/app'
+  import 'firebase/auth'
+  import db from './../firebase'
+
   export default {
     data () {
       return {
+        user : {},
         month : ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
         tanggal : '',
         drawer : false,
         right: null,
       }
     },
+    methods : {
+      logout(){
+        firebase.auth().signOut().then(() => {
+          this.$router.push('/auth')
+        })
+      }
+    },
+    watch : {
+      user : {
+        handler() {
+          this.$emit('dataUserFromAppBar', this.user)
+        },
+        deep : true
+      }
+  
+    },
     created(){
       this.tanggal = new Date().getDate()+' '+this.month[new Date().getMonth()]+' '+new Date().getFullYear()
+      db.collection('penagih').where('email', '==', firebase.auth().currentUser.email).get().then((querysnapshot) => {
+        querysnapshot.forEach(doc => {
+          this.user =  doc.data()
+        })
+      })
+      
     },
     methods : {
   

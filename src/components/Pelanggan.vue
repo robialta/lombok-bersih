@@ -118,6 +118,20 @@
 								required
 								@keyup="checkbtnvalid"
 							></v-text-field>
+							<!-- ============================== Penagih ======================================== -->
+							<v-select
+								solo
+								flat
+								background-color="blue-grey lighten-5"
+								v-model="selectedPenagih"
+								:items="penagihTersedia"
+								item-text="nama"
+								item-value="id"
+								label="Penagih"
+								data-vv-name="Penagih"
+								required
+								@change="checkbtnvalid"
+							></v-select>
 							<v-row>
 								<v-col class="pt-0 pb-1">Tanggal masuk</v-col>
 								<v-col class="pt-0 pb-1">
@@ -225,6 +239,19 @@
 								required
 								@keyup="checkbtneditvalid"
 							></v-text-field>
+							<v-select
+								solo
+								flat
+								background-color="blue-grey lighten-5"
+								v-model="edited.penagih"
+								:items="penagihTersedia"
+								item-text="nama"
+								item-value="id"
+								label="Penagih"
+								data-vv-name="penagih"
+								required
+								@change="checkbtneditvalid"
+							></v-select>
 						</v-form>
 					</v-card-text>
 					<v-divider></v-divider>
@@ -307,6 +334,10 @@
 									<td>Jenis</td>
 									<td>: {{ selectedPelanggan.jenis }}</td>
 								</tr>
+								<tr>
+									<td>Penagih</td>
+									<td>: {{ ambilNamaPenagih(selectedPelanggan.penagih).nama }}</td>
+								</tr>
 							</tbody>
 							</template>
 						</v-simple-table>
@@ -325,7 +356,7 @@
 												<v-list-item three-line>
 												<v-list-item-content>
 													<div class="subtitle-2 ">{{p.bulan}} {{p.tahun}}</div>
-													<v-list-item-title v-if="p.lunas" class="headline mb-1">LUNAS</v-list-item-title>
+													<v-list-item-title v-if="p.lunas" class="headline mb-1">Rp. {{p.harga}}</v-list-item-title>
 													<v-list-item-title v-else class="headline mb-1">Belum dibayar</v-list-item-title>
 													<v-list-item-subtitle class="caption text-right">{{formatTanggal(p.tanggal_bayar)}}</v-list-item-subtitle>
 												</v-list-item-content>
@@ -629,6 +660,8 @@ export default {
 			rtTersedia: [],
 			selectedJenis: "",
 			jenisTersedia: [],
+			selectedPenagih: "",
+			penagihTersedia: [],
 			disabledbtn: true,
 			disabledbtnedit: true,
 			show: false,
@@ -699,6 +732,7 @@ export default {
 					nik: this.formnik,
 					rt: this.selectedRt,
 					telepon: this.formtelepon,
+					penagih : this.selectedPenagih,
 					tanggal_masuk: firebase.firestore.Timestamp.fromDate(
 						new Date(this.picker)
 					),
@@ -823,7 +857,8 @@ export default {
 								tahun: el.tahun,
 								bulan: el.bulan,
 								lunas: el.lunas,
-								tanggal_bayar: el.tanggal_bayar
+								tanggal_bayar: el.tanggal_bayar,
+								haga : el.harga
 							};
 							arrpembayaran.push(pb);
 						});
@@ -836,6 +871,7 @@ export default {
 							bintang: doc.data().bintang,
 							jenis: doc.data().jenis,
 							nik: doc.data().nik,
+							penagih : doc.data().penagih,
 							pembayaran: doc.data().pembayaran,
 							tanggal_masuk : doc.data().tanggal_masuk
 						};
@@ -880,6 +916,20 @@ export default {
 						this.jenisTersedia.push(doc.data().nama);
 					});
 				});
+			db.collection("penagih")
+				.where('authstatus', '==', 'penagih')
+				.get()
+				.then(querysnapshot => {
+					var arrTampunganPenagih = []
+					querysnapshot.forEach(doc => {
+						var ob = {
+							nama : doc.data().nama,
+							id : doc.id
+						}
+						arrTampunganPenagih.push(ob);
+					});
+					this.penagihTersedia = arrTampunganPenagih
+				});
 		},
 		setSelectRtData() {
 			var arrjmlrt = [];
@@ -907,7 +957,8 @@ export default {
 					if(this.formnama != "" &&
 						this.formtelepon.length >= 11 &&
 						this.selectedDusun != "" &&
-						this.selectedRt != ""){
+						this.selectedRt != "" &&
+						this.selectedPenagih != ""){
 							this.disabledbtn = false
 						}else{
 							this.disabledbtn = true
@@ -950,11 +1001,13 @@ export default {
 			this.formtelepon = "";
 			this.selectedJenis = "";
 			this.selectedDusun = ""
+			this.formpenagih = ""
 			this.picker = new Date().toISOString().substr(0, 10)
 		},
 		showDetail(pelanggan){
-			var pel = pelanggan
-			pel.pembayaran = pelanggan.pembayaran.reverse()
+			var p = JSON.parse(JSON.stringify(pelanggan)) 
+			var pel = p
+			pel.pembayaran = p.pembayaran.reverse()
 			this.selectedPelanggan = pel
 			this.detail = true
 		},
@@ -965,6 +1018,15 @@ export default {
 		formatTanggal(tanggal){
 			var spltanggal = tanggal.split('-')
 			return spltanggal[2]+'-'+spltanggal[1]+'-'+spltanggal[0]
+		},
+		ambilNamaPenagih(id){
+			var penagih = {}
+			this.penagihTersedia.forEach(el => {
+				if(el.id == id){
+					penagih = el
+				}
+			})
+			return penagih
 		}
 	},
 	created() {

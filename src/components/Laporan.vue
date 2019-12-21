@@ -339,6 +339,9 @@ import html2canvas from "html2canvas";
 	background: #ffffffde;
 	padding-top: 300px;
 }
+.laporan {
+	border-top: 0.5px solid rgba(0, 0, 0, 0.336);
+}
 .bk{
 	border-left:1px solid rgba(0, 0, 0, 0.12)
 }
