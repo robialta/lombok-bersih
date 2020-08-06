@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 import Routes from './routes'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import './registerServiceWorker'
 
 Vue.config.productionTip = false
 // Vue.use(VueResource)
@@ -47,7 +48,7 @@ router.beforeEach((to, from, next) => {
 
 
 
-let app 
+let app
 firebase.auth().onAuthStateChanged(() =>{
   if (!app){
     app = new Vue({

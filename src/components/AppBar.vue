@@ -46,7 +46,6 @@
           <v-tab to="/tagihan">Tagihan</v-tab>
           <v-tab  to="/pelanggan">Pelanggan</v-tab>
           <v-tab to="/laporan">Laporan </v-tab>
-          <v-tab to="/Rekap">Rekap </v-tab>
           <v-tab v-show="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb 8uy48 3KIUJ(*_HUHyuh*8uh9YT*y7y8y89yYh9y98">Master </v-tab>
           
         </v-tabs>     
@@ -95,10 +94,6 @@
       })
       
     },
-    methods : {
-  
-      
-    }
   }
 </script>
 

@@ -324,9 +324,6 @@
 											<v-btn color="primary" @click="showDetail(d)" class="mr-4" fab x-small outlined>
 												<v-icon>info</v-icon>
 											</v-btn>
-											<v-btn color="red" @click="cancelPembayaran(d)" class="mr-4" fab x-small outlined>
-												<v-icon>info</v-icon>
-											</v-btn>
 										</v-flex>
 									</v-layout>
 									<v-divider></v-divider>
@@ -350,8 +347,8 @@ import Loader from "./Loader";
 export default {
 	name: "Dashboard",
 	components : {
-		 Loader,
-		 AppBar
+		Loader,
+		AppBar
 	},
 	props: {},
 	data() {
@@ -438,6 +435,7 @@ export default {
 			let batch = db.batch()
 			var ref = db.collection('pelanggan').doc(this.anggotaTerpilih.id);
 			var iterator = Array(this.bulan_terpilih[1])
+			// eslint-disable-next-line
 			for(var i of iterator){
 				if (bulan >= 12){
 					bulan = 0
@@ -471,23 +469,6 @@ export default {
 					this.deletePembayar()
 				})
 	
-		},
-		cancelPembayaran(p){
-			var pembayaranTerakhir = p.pembayaran[p.pembayaran.length-1]
-			// console.log(pembayaranTerakhir)
-			var ref = db.collection('pelanggan').doc(p.id)
-			ref.update({
-				'pembayaran' : firebase.firestore.FieldValue.arrayRemove({
-						"tahun": pembayaranTerakhir.tahun,
-						"no_bulan": pembayaranTerakhir.no_bulan,
-
-					})
-			}).then(() => {
-				console.log('Berhasil')
-			}).catch((err) => {
-				console.log(err)
-			})
-			
 		},
 		searching() {
 			var an = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
