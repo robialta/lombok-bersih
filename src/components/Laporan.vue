@@ -78,14 +78,15 @@
 								</v-container>
 							</v-card-title>
 							
-							<v-card-text style="overflow:auto">
+							<v-card-text style="overflow:auto;margin:auto">
 								<!-- ========================================= Kontent =========================================== -->
 								<v-container >
+					
 									<v-card class="tabelPrint"  outlined v-for="(page, index) in pages" :key="index">							
 										<v-card-text :id="'page'+index">
-											<div  class="text-center">
+											<div  class="">
 												<div class="title" >
-													DUSUN {{ dusun.toUpperCase() }} RT {{ rt.toString().toUpperCase() }} DESA LABUHAN LOMBOK TAHUN {{tahun}}		
+													PEMBAYARAN IURAN SAMPAH DESA LABUHAN LOMBOK {{tahun}}
 												</div>
 											</div>
 											<table class="tex-center" style="width:12.5in;" >
@@ -101,7 +102,7 @@
 													</thead>
 
 													<tbody>
-														<tr  v-for="(p, i) in page" :key="p.id" >
+														<tr v-for="(p, i) in page" :key="p.id">
 															<td  class="text-center pa-3" style="border-left:1px solid #737373d6">{{ i +1}}</td>
 															<td style="" class="px-1 py-3" >{{ p.nama }}</td>												
 															<td v-for="(l,i) in p.pembayaran" :key="i" class="pa-0" >
@@ -109,14 +110,33 @@
 																	<td v-if="l.lunas" class="pa-1 text-center" style="border:none;width:85px;" >
 																		<span class="caption ">Rp. {{l.harga}}</span>
 																	</td>
+
+																	<td v-else-if="l.lunas==false && new Date(tahun,i).getTime() < new Date(tahun,bln).getTime() && new Date(tahun,i).getTime() >= new Date(p.tahun_masuk,p.tanggal_masuk).getTime()" class="pa-3 text-center" style="border:none;width:85px;" >
+																		<span class="caption" style="" > <strong>_</strong> </span>
+																	</td>
 																	<td v-else class="pa-3 text-center" style="border:none;width:85px;" >
-																		<span class="caption " >_</span>
+																		<span class="caption " ></span>
 																	</td>
 
 																</tr>
 															</td>
 														</tr>
 													</tbody>
+													<thead>
+														<tr class="">
+															<th class="pa-1 text-center " style="border-left:1px solid #737373d6" colspan="2">Total</th>
+															<th style="" v-for="(total, n) in arrJumlahBayar" :key="n" class="pa-1 text-center " ><span v-show="total != 0">Rp. {{total}}</span> </th>
+														</tr>
+														<tr class="">
+															<th class="pa-1 text-center " style="border-left:1px solid #737373d6" colspan="2">Tonggakan</th>
+															<th style="" v-for="(tonggakan, n) in arrTonggakan" :key="n" class="pa-1 text-center " ><span v-show="tonggakan > 0">Rp. {{tonggakan}}</span></th>
+														</tr>
+														<tr class="">
+															<th class="pa-1 text-center " style="border-left:1px solid #737373d6" colspan="2">Estimasi</th>
+															<th style="" v-for="(est, n) in estimasiPembayaran" :key="n" class="pa-1 text-center " ><span v-show="est != 0">Rp. {{est}}</span> </th>
+														</tr>
+		
+													</thead>
 											</table>
 										</v-card-text>
 									</v-card>
@@ -137,6 +157,7 @@ import Loader from "./Loader";
 import db from "./../firebase";
 import jsPDF from 'jspdf';
 import html2canvas from "html2canvas";
+import { database } from 'firebase';
   export default {
 	name : "Tagihan",
 	components: {
@@ -156,6 +177,7 @@ import html2canvas from "html2canvas";
 		snackbar : false,
 		snackText : "",
 		tahun : new Date().getFullYear(),
+		bln : new Date().getMonth(),
 		pilihanTahun : [],
 		dusuns : [],
 		dusun : 'Semua dusun',
@@ -163,11 +185,86 @@ import html2canvas from "html2canvas";
 		rt : 'Semua rt',
 		data_pelanggan : [],
 		data_tampil : [],
+		data_iuran : [],
 		bulan : ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
-		pages : []
+		pages : [],
+		arrJumlahBayar : [],
+		arrTonggakan : [],
+		totalPelangganPerBulan : [],
+		estimasiPembayaran : []
       }
     },
-     methods: {
+    methods: {
+		hittungJumlahPelangganPerBulan(){
+			var tampunganpelangganPerbulan = []
+			var tampunganHargaPerbulan = []
+			var tampungantonggakan = []
+			this.bulan.forEach((e,b) => {
+				var j = 0
+				var h = 0
+				this.pages[0].forEach(e => {
+					if (this.tahun < new Date().getFullYear()){
+						if( new Date(this.tahun,b).getTime() < new Date(this.tahun,12).getTime() && new Date(this.tahun,b).getTime() >= new Date(e.tahun_masuk,e.tanggal_masuk).getTime()){
+							if (e.pembayaran[b].harga == 0){
+								h = h += e.harga
+							}else{
+								h = h += e.pembayaran[b].harga
+							}
+							j = j +=1
+						}
+					}else{
+						if( new Date(this.tahun,b).getTime() < new Date(this.tahun,this.bln).getTime() && new Date(this.tahun,b).getTime() >= new Date(e.tahun_masuk,e.tanggal_masuk).getTime()){
+							if (e.pembayaran[b].harga == 0){
+								h = h += e.harga
+							}else{
+								h = h += e.pembayaran[b].harga
+							}
+							j = j +=1
+						}
+					}			
+				})
+				tampunganHargaPerbulan.push(h)
+				tampunganpelangganPerbulan.push(j)
+				this.estimasiPembayaran = tampunganHargaPerbulan
+				this.totalPelangganPerBulan = tampunganpelangganPerbulan
+			})
+			
+			this.bulan.forEach((e,i) => {
+				tampungantonggakan.push(this.estimasiPembayaran[i] - this.arrJumlahBayar[i])
+			})
+			this.arrTonggakan = tampungantonggakan
+	
+		},
+		hitungJumlahBayar(){
+			var arrtam = []	
+			this.bulan.forEach((e,i) =>{
+				arrtam.push(this.filterQuery(this.data_pelanggan, this.bulan[i]))
+			})
+			
+			arrtam.forEach((el,ind) => {
+				var jumlah_bayar = 0
+				el.forEach((elm, inde) => {
+					elm.pembayaran.forEach((elme, index) => {					
+						if(elme.no_bulan == ind && elme.tahun == this.tahun){
+							jumlah_bayar = jumlah_bayar + elme.harga
+						}					
+					})
+				})
+				this.arrJumlahBayar.push(jumlah_bayar)
+		})
+			
+		},
+		filterQuery(arr, bulan) {
+			var hasilFilter = [];
+			arr.forEach((e, i) => {
+				e.pembayaran.forEach(el => {
+					if (el.bulan == bulan && el.tahun == this.tahun) {
+						hasilFilter.push(arr[i]);
+					}
+				});
+			});
+			return hasilFilter;
+		},
 		createPDF () {
 			this.pages.forEach((e,i) =>{
 				const doc = new jsPDF({
@@ -186,31 +283,42 @@ import html2canvas from "html2canvas";
 		loadData(){
 			this.show = true
 			var arrTampungan = [];
+			this.loadDataIuran()
 			db.collection("pelanggan")
 				.orderBy("tanggal_masuk", "desc")
 				.get()
 				.then(querysnapshot => {
 					querysnapshot.forEach(doc => {
 						var arrpembayaran = [];
+						
 						doc.data().pembayaran.forEach(el => {
 							const pb = {
 								tahun: el.tahun,
 								bulan: el.bulan,
 								lunas: el.lunas,
 								tanggal_bayar: el.tanggal_bayar,
-								harga : el.harga
+								harga : parseInt(el.harga)
 							};
 							arrpembayaran.push(pb);
 						});
-						const dp = {
+						var hrg = 0
+						for( let i=0; i < this.data_iuran.length;i++){
+							if ( this.data_iuran[i].nama == doc.data().jenis){
+								hrg = this.data_iuran[i].harga
+							}
+						} 
+						
+						const dp = { 
 							id: doc.id,
 							nama: doc.data().nama,
+							harga : hrg,
 							dusun: doc.data().dusun,
 							rt: doc.data().rt,
 							telepon: doc.data().telepon,
 							bintang: doc.data().bintang,
 							jenis: doc.data().jenis,
 							nik: doc.data().nik,
+							tanggal_masuk : doc.data().tanggal_masuk,
 							pembayaran: doc.data().pembayaran
 						};
 						arrTampungan.push(dp);
@@ -225,7 +333,12 @@ import html2canvas from "html2canvas";
 					this.manageData()
 					this.pilihTahunTersedia()
 					this.createPage()
+					this.arrJumlahBayar = []
+					this.hitungJumlahBayar()
+					this.hittungJumlahPelangganPerBulan()
+					
 					this.show = false;
+					
 				})
 				.catch(function(error) {
 					alert(error);
@@ -260,7 +373,7 @@ import html2canvas from "html2canvas";
 		},
 		pilihTahunTersedia() {
 			var tampunganTahunTersedia = []
-			var tahun_mulai = 2018
+			var tahun_mulai = 2019
 			var tahun_sekarang = new Date().getFullYear()
 			for(var i = tahun_mulai;i <= tahun_sekarang;i++){
 				tampunganTahunTersedia.push(i)
@@ -273,12 +386,14 @@ import html2canvas from "html2canvas";
 				var pempel = []
 				for(let i = 0;i < 12;i++){
 					var lunas = false
-					var harga = ''				
+					var harga = 0				
 					pelanggan.pembayaran.forEach(e=>{
 						if (i == e.no_bulan && e.tahun == this.tahun) {
 							lunas = true
-							harga = e.harga				
+							harga = e.harga		
 						}
+						
+						
 					})
 					const ob = {
 						lunas : lunas,
@@ -290,9 +405,16 @@ import html2canvas from "html2canvas";
 				
 				const np = {
 					nama : pelanggan.nama,
+					harga : pelanggan.harga,
+					tanggal_masuk : new Date(pelanggan.tanggal_masuk.seconds*1000).getMonth(),
+					tahun_masuk : new Date(pelanggan.tanggal_masuk.seconds*1000).getFullYear(),
+					tanggal_masuk_second : new Date(pelanggan.tanggal_masuk.seconds*1000).getTime(),
 					pembayaran : pempel
 				}
-				pel.push(np)				
+				if (new Date(pelanggan.tanggal_masuk.seconds*1000).getFullYear() <= this.tahun){
+					pel.push(np)
+				}
+								
 			})	
 			this.data_tampil = pel
 		},
@@ -317,6 +439,20 @@ import html2canvas from "html2canvas";
 			this.tahun = tahun
 			this.loadData()
 		},
+		loadDataIuran(){
+			var tda = []
+			db.collection('iuran').get().then(querysnapshot=>{
+				querysnapshot.forEach(el=>{
+					const di = {
+						nama : el.data().nama,
+						harga : el.data().harga
+					}
+					tda.push(di)	
+				})		
+								
+			})
+			this.data_iuran = tda
+		}
 		
     },
     created(){
@@ -357,7 +493,7 @@ import html2canvas from "html2canvas";
 
 .tabelPrint{
 	overflow: auto;
-	width: 13in;
+	/* width: 15in; */
 	height: 8.5in;
 }
 table {

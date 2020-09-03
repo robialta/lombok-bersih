@@ -10,11 +10,11 @@
                     >
                     <v-col class="text-center" cols="12">
                         <div >
-                        <span class="lombok shadow">LOMBOK </span> 
-                        <span class="bersih shadow">BERSIH </span>   
+                            <v-img src="../assets/logo.png" class="gmbr" max-height="170" max-width="170"></v-img>
+                        <span class="lombok ">LOMBOK </span> 
+                        <span class="bersih">BERSIH </span>   
                     </div>
-                    <h1 class="white--text mb-2 display-1 text-center shadow">Ciptakan desa lb. lombok terbersih sejagat raya</h1>
-                    <div class="subheading mb-4 text-center shadow">Powered by KKN UNHAZ 2019 || PEMDES LB LOMBOK || KARANG TARUNA LB LOMBOK</div>
+                    <h2 class="white--text mb-2 display-1 text-center shadow">Ciptakan desa Lb. Lombok paling bersih sejagat raya</h2>
                     </v-col>
                     </v-row>
             </v-parallax>
@@ -38,10 +38,10 @@
                     <v-flex xs12 md4>
                     <v-card flat class="transparent">
                         <v-card-text class="text-center">
-                        <v-icon x-large class="blue--text text--lighten-2">mdi-palette</v-icon>
+                        <v-img src="../assets/bersih.jpg" class="gmbr" max-height="100" max-width="100"></v-img>
                         </v-card-text>
                         <v-card-title primary-title class="layout justify-center">
-                        <div class="headline text-center">Keuntungan 1</div>
+                        <div class="headline text-center">Lingkungan bersih</div>
                         </v-card-title>
                         <v-card-text>
                         Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
@@ -53,10 +53,10 @@
                     <v-flex xs12 md4>
                     <v-card flat class="transparent">
                         <v-card-text class="text-center">
-                        <v-icon x-large class="blue--text text--lighten-2">mdi-flash</v-icon>
+                        <v-img src="../assets/world.jpg" class="gmbr" max-height="100" max-width="100"></v-img>
                         </v-card-text>
                         <v-card-title primary-title class="layout justify-center">
-                        <div class="headline">Keuntungan 2</div>
+                        <div class="headline">Hidup sehat</div>
                         </v-card-title>
                         <v-card-text>
                         Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
@@ -68,10 +68,10 @@
                     <v-flex xs12 md4>
                     <v-card flat class="transparent">
                         <v-card-text class="text-center">
-                        <v-icon x-large class="blue--text text--lighten-2">mdi-wrench</v-icon>
+                        <v-img src="../assets/hemat.jpg" class="gmbr" max-height="100" max-width="100"></v-img>
                         </v-card-text>
                         <v-card-title primary-title class="layout justify-center">
-                        <div class="headline text-center">Keuntungan 3</div>
+                        <div class="headline text-center">Hemat biaya berobat</div>
                         </v-card-title>
                         <v-card-text>
                         Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
@@ -412,13 +412,13 @@ export default {
 
   .lombok{
     font-family: 'Sedgwick Ave Display', cursive;
-    color: rgba(0, 149, 255, 0.87);
+    color: #f01799;
     font-size: 40px;
   
   }
   .bersih{
     font-family: 'Patrick Hand', cursive;
-    color: #5ad264;
+    color: #38cfe0;
     font-size: 20px;
     text-shadow: 3px 3px 12px rgba(70, 240, 183, 0.58);
     padding-right: 5px;
@@ -426,11 +426,14 @@ export default {
   }
 
   .shadow{
-      text-shadow: 2px 2px 7px #292929 
+      text-shadow: 2px 2px 7px #474747ee 
   }
   .gradien{
       background: radial-gradient(#afafaf, #607D8B)
   }
+.gmbr{
+    margin: auto;
+}
 
 .ovrly{
     height: 400px;

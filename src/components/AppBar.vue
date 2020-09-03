@@ -103,14 +103,14 @@
   }
     .lombok{
     font-family: 'Sedgwick Ave Display', cursive;
-    color: rgba(0, 149, 255, 0.87);
+    color: #f01799;
   
   }
   .bersih{
     font-family: 'Patrick Hand', cursive;
-    color: #5ad264;
+    color: #38cfe0;
     font-size: 20px;
-    text-shadow: 3px 3px 12px rgba(70, 240, 183, 0.58);
+    /* text-shadow: 3px 3px 12px rgba(70, 240, 183, 0.58); */
     padding-right: 5px;
   }
   @media only screen and (max-width: 768px) {

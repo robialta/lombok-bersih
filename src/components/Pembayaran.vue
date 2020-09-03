@@ -83,7 +83,7 @@
 			</v-row>
 			<!-- ================================================ Dialog detail ============================================== -->
 			<!-- Konten -->
-			<div class="konten" v-show="!show" style="height:1000px">
+			<div class="konten" v-show="!show">
 				<v-card flat style="border-radius:0px;border=0; overflow:auto">
 					<v-container style="{display : show}">
 						<!-- ================================================================================= -->
@@ -300,6 +300,7 @@
 								</v-row>
 							</v-card-title>
 							<v-card-text>
+								{{data_pelanggan}}
 								<v-card class="pa-1" flat v-for="d in data_tampil" :key="d.id">
 									<v-layout row wrap class="pa-2 item-list">
 										<v-flex xs12 md4 lg4>

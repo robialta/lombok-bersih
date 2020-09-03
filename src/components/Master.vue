@@ -778,7 +778,7 @@ export default {
             this.loadingBtnIuran = true
             db.collection('iuran').add({
                 nama : this.form_nama,
-                harga : this.form_harga
+                harga : parseInt(this.form_harga)
             }).then(() => {
                 this.dialogIuran = false
                 this.loadingBtnDusun = false
@@ -796,7 +796,7 @@ export default {
             this.loadingBtnDusun = true
             db.collection('iuran').doc(this.selectedIuran.id).update({
                 nama : this.selectedIuran.nama,
-                harga : this.selectedIuran.harga
+                harga : parseInt(this.selectedIuran.harga)
             }).then(()=>{
                 this.loadingBtnDusun = false
                 this.dialogEditIuran = false
