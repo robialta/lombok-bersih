@@ -19,6 +19,7 @@
     "firebase-admin": "^8.8.0",
     "firebase-tools": "^7.6.0",
     "jspdf": "^1.5.3",
+    "jspdf-autotable": "^3.5.10",
     "nexmo": "^2.5.1",
     "register-service-worker": "^1.7.1",
     "twilio": "^3.35.1",

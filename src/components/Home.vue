@@ -1,96 +1,168 @@
 <template>
     <div class="home">
-        <section>
-            <v-parallax class="gambar" src="../assets/kkn.jpeg" style="top:0" height="400">
-                <v-row
-                    style="position:absolute;left:0"            
-                    class="ovrly mx-auto"
-                    align="center"
-                    justify="center"
+         <section class="nav">
+            <v-container >
+                <v-toolbar 
+                    flat
+                    class="ts"
                     >
-                    <v-col class="text-center" cols="12">
-                        <div >
-                            <v-img src="../assets/logo.png" class="gmbr" max-height="170" max-width="170"></v-img>
-                        <span class="lombok ">LOMBOK </span> 
-                        <span class="bersih">BERSIH </span>   
-                    </div>
-                    <h2 class="white--text mb-2 display-1 text-center shadow">Ciptakan desa Lb. Lombok paling bersih sejagat raya</h2>
-                    </v-col>
-                    </v-row>
-            </v-parallax>
+                    <v-app-bar-nav-icon>
+                        <v-img src="../assets/logo.png" class="gmbr" max-height="60" max-width="60"></v-img>
+                    </v-app-bar-nav-icon>
+                    <v-toolbar-title>
+                    LOMBOK BERSIH
+                    </v-toolbar-title>
+
+                    <v-spacer></v-spacer>
+
+                    <router-link to="/pembayaran">
+                    <v-btn icon>
+                        <v-icon>mdi-export</v-icon>
+                    </v-btn>
+                    </router-link>
+                    
+                </v-toolbar>
+            </v-container>
+       </section>
+
+        <section class="slider">
+            <v-carousel
+                class=""
+                cycle
+                height="400"
+                hide-delimiter-background
+                show-arrows-on-hover>
+                <v-carousel-item transition="fade-transition" reverse-transition="fade-transition" >
+                    <v-sheet
+                        color="white"
+                        height="100%">
+                        <v-row
+                            class="fill-height"
+                            align="center"
+                            justify="center">
+                            <v-card flat class="">
+                                <v-img src="../assets/slide1.jpg" class="gmbr" ></v-img>               
+                            </v-card>
+                        </v-row>
+                    </v-sheet>
+                </v-carousel-item>
+                <v-carousel-item transition="fade-transition" reverse-transition="fade-transition" >
+                    <v-sheet
+                        color="#cad4dd"
+                        height="100%">
+                        <v-row
+                            class="fill-height"
+                            align="center"
+                            justify="center">
+                            <v-card flat class="">
+                                <v-img src="../assets/slide3.jpg" class="gmbr" ></v-img>               
+                            </v-card>
+                        </v-row>
+                    </v-sheet>
+                </v-carousel-item>
+                <v-carousel-item transition="fade-transition" reverse-transition="fade-transition" >
+                    <v-sheet
+                        color="white"
+                        height="100%">
+                        <v-row
+                            class="fill-height"
+                            align="center"
+                            justify="center">
+                            <v-card flat class="">
+                                <v-img src="../assets/slide2.jpg" class="gmbr" ></v-img>               
+                            </v-card>
+                        </v-row>
+                    </v-sheet>
+                </v-carousel-item>
+                <v-carousel-item transition="fade-transition" reverse-transition="fade-transition" >
+                    <v-sheet
+                        color="#fbf4e2"
+                        height="100%">
+                        <v-row
+                            class="fill-height"
+                            align="center"
+                            justify="center">
+                            <v-card flat class="">
+                                <v-img src="../assets/slide4.jpg" class="gmbr" ></v-img>               
+                            </v-card>
+                        </v-row>
+                    </v-sheet>
+                </v-carousel-item>
+            </v-carousel>
         </section>
 
-        <section>
+      
+
+        <section class="keuntungan pa-2 pt-5">
+        
             <v-layout
             column
             wrap
-            class="my-12"
             align-center
-            >
-            <v-flex xs12 sm4 class="my-4">
+            >          
+            <v-flex xs12 sm4 class="">
                 <div class="text-center">
-                <h2 class="headline">Keuntungan </h2>
+                    <h2 class="headline" style="color : #004d6b">Manfaat </h2>
                 </div>
             </v-flex>
-            <v-flex xs12>
-                <v-container grid-list-xl>
-                <v-layout row wrap align-center>
-                    <v-flex xs12 md4>
-                    <v-card flat class="transparent">
-                        <v-card-text class="text-center">
-                        <v-img src="../assets/bersih.jpg" class="gmbr" max-height="100" max-width="100"></v-img>
-                        </v-card-text>
-                        <v-card-title primary-title class="layout justify-center">
-                        <div class="headline text-center">Lingkungan bersih</div>
-                        </v-card-title>
-                        <v-card-text>
-                        Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                        Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
-                        </v-card-text>
-                    </v-card>
-                    </v-flex>
-                    <v-flex xs12 md4>
-                    <v-card flat class="transparent">
-                        <v-card-text class="text-center">
-                        <v-img src="../assets/world.jpg" class="gmbr" max-height="100" max-width="100"></v-img>
-                        </v-card-text>
-                        <v-card-title primary-title class="layout justify-center">
-                        <div class="headline">Hidup sehat</div>
-                        </v-card-title>
-                        <v-card-text>
-                        Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                        Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
-                        </v-card-text>
-                    </v-card>
-                    </v-flex>
-                    <v-flex xs12 md4>
-                    <v-card flat class="transparent">
-                        <v-card-text class="text-center">
-                        <v-img src="../assets/hemat.jpg" class="gmbr" max-height="100" max-width="100"></v-img>
-                        </v-card-text>
-                        <v-card-title primary-title class="layout justify-center">
-                        <div class="headline text-center">Hemat biaya berobat</div>
-                        </v-card-title>
-                        <v-card-text>
-                        Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                        Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
-                        </v-card-text>
-                    </v-card>
-                    </v-flex>
-                </v-layout>
+            <v-flex xs12 >
+                <v-container >
+                    <v-layout row wrap align-center>
+                        <v-flex class="box" xs12 md4 >
+                            <v-card flat class="transparent">
+                                <v-card-text class="text-center">
+                                <v-img src="../assets/bersih.jpg" class="gmbr" max-height="60" max-width="60"></v-img>
+                                </v-card-text>
+                                <v-card-title primary-title class="layout justify-center">
+                                <div class="headline text-center">Lingkungan bersih</div>
+                                </v-card-title>
+                                <v-card-text>
+                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
+                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex class="box" xs12 md4>
+                            <v-card flat class="transparent">
+                                <v-card-text class="text-center">
+                                <v-img src="../assets/world.jpg" class="gmbr" max-height="60" max-width="60"></v-img>
+                                </v-card-text>
+                                <v-card-title primary-title class="layout justify-center">
+                                <div class="headline">Hidup sehat</div>
+                                </v-card-title>
+                                <v-card-text>
+                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
+                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex class="box" xs12 md4>
+                            <v-card flat class="transparent">
+                                <v-card-text class="text-center">
+                                <v-img src="../assets/hemat.jpg" class="gmbr" max-height="60" max-width="60"></v-img>
+                                </v-card-text>
+                                <v-card-title primary-title class="layout justify-center">
+                                <div class="headline text-center">Hemat biaya berobat</div>
+                                </v-card-title>
+                                <v-card-text>
+                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
+                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                    </v-layout>
                 </v-container>
             </v-flex>
             </v-layout>
         </section>
 
-        <section >
-            <v-row class="gradien mx-auto py-7" style="width:100%;height:">
+         <section class="cek ma-2">
+            <v-row class=" mx-auto pb-7" style="width:100%;height:">
                 <v-col class="text-center">
-                    <div class="headline white--text mb-4 text-center">Cek data keanggotaan dan sejarah pembayaran anda</div>
-                    <em class="white--text mb-4 ">Masukkan nama atau NIK disini</em>
+                    <div class="headline  mb-4 " style="color : #004d6b">Cek data keanggotaan dan sejarah pembayaran anda</div>
                     <v-text-field
                         class="px-2"
                         @keyup="cariPembayar"
@@ -131,37 +203,34 @@
             </v-row>
         </section>
 
-        <section>
+        <section class="foot">
             <v-container grid-list-xl>
             <v-layout row wrap justify-center class="mt-12">
                 <v-flex xs12 sm4>
-                <v-card flat class="transparent">
+                <v-card flat class="transparent white">
                     <v-card-title primary-title class="layout justify-center">
-                    <div class="headline">Informasi program lombok bersih </div>
+                    <div class="headline grey--text text-center">INFORMASI PROGRAM LOMBOK BERSIH</div>
                     </v-card-title>
-                    <v-card-text>
-                    Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                    Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti. 
-                    <router-link to="/pembayaran">Penagih</router-link>
+                    <v-card-text class="grey--text">
+                    Program LOMBOK BERSIH adalah program 
                     </v-card-text>
                 </v-card>
                 </v-flex>
                 <v-flex xs12 sm4 offset-sm1>
-                <v-card flat class="transparent">
+                <v-card flat class="transparent white">
                     <v-card-title primary-title class="layout justify-center">
-                    <div class="headline">Kontak kami</div>
+                    <div class="headline grey--text">KONTAK KAMI</div>
                     </v-card-title>
-                    <v-card-text>
+                    <v-card-text class="grey--text">
                     Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
                     </v-card-text>
-                    <v-list class="transparent">
+                    <v-list class="transparent white">
                     <v-list-item>
                         <v-list-item-action>
                         <v-icon class="blue--text text--lighten-2">mdi-phone</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
-                        <v-list-item-title>777-867-5309</v-list-item-title>
+                        <v-list-item-title class="grey--text">777-867-5309</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                     <v-list-item>
@@ -169,7 +238,7 @@
                         <v-icon class="blue--text text--lighten-2">mdi-map-marker</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
-                        <v-list-item-title>Labuhan lombok, pringgabaya </v-list-item-title>
+                        <v-list-item-title class="grey--text">Labuhan lombok, pringgabaya </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                     <v-list-item>
@@ -177,7 +246,7 @@
                         <v-icon class="blue--text text--lighten-2">mdi-email</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
-                        <v-list-item-title>lblombokbersih@gmail.com</v-list-item-title>
+                        <v-list-item-title class="grey--text">lblombokbersih@gmail.com</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
                     </v-list>
@@ -290,7 +359,12 @@ export default {
             munculListPembayar : false,
             pembayar : [],
             selectedPelanggan : [],
-            detail : false
+            detail : false,
+            slides : [
+                {src : '../assets/slide1.jpg', color : 'red'}, 
+                {src : '../assets/slide2.jpg', color : 'green'}, 
+                {src : '../assets/slide3.jpg', color : 'white'}, 
+                {src : '../assets/slide4.jpg', color : 'orange'}]
         }
     },
     methods :{
@@ -429,7 +503,8 @@ export default {
       text-shadow: 2px 2px 7px #474747ee 
   }
   .gradien{
-      background: radial-gradient(#afafaf, #607D8B)
+      background: linear-gradient(0deg, rgba(48,74,151,1) 0%, rgba(34,129,195,1) 100%);
+
   }
 .gmbr{
     margin: auto;
@@ -441,5 +516,54 @@ export default {
     background: #0000008c;
     -webkit-filter: blur(3px); /* Chrome, Opera */
     filter: hue-rotate()
+}
+.keuntungan{
+    position: relative;
+    top: -60px;
+    /* z-index: -1; */
+    background-color: #e9f2fe;
+    background-image: url('../assets/7-steps-background.png');
+    background-size:cover;
+}
+.box{
+    background: white;
+    box-sizing: border-box;
+    border: 10px solid#e9f2fe;
+    border-radius: 30px;
+}
+.foot{
+    position: relative;
+    top: -60px;
+    background: #191919;
+    color: white;
+}
+.white{
+    color: whitesmoke;
+}
+.cek{
+    position: relative;
+    top: -60px;
+    /* background: #1c3f5d; */
+    border-radius: 10px;
+    /* border: 1px solid rgba(0, 0, 0, 0.075); */
+    -webkit-box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 26px 1px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.171);
+}
+.nav{
+    position: relative;
+    z-index: 99;
+    height: 60px;
+    width: 100%;
+    background: transparent;
+    /* border-bottom: 1px solid black; */
+    /* position: fixed; */
+}
+.ts{
+    background-color: rgba(0, 0, 0, 0);
+}
+.slider{
+    position: relative;
+    top: -60px;
 }
 </style>

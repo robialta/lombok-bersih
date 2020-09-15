@@ -90,6 +90,15 @@
 						<v-card flat>
 							<v-card-title>
 								<v-row class>
+									
+									<v-chip
+										style="height:28px"
+										class="mx-1 mb-3"
+										color="primary"
+										label
+										>
+										{{aktif.authstatus}} 
+									</v-chip>	
 									<v-chip
 										style="height:28px"
 										class="mx-1 mb-3"
@@ -97,8 +106,23 @@
 										label
 										>
 										{{ambilNamaBulan(bulan_pembayaran)}} {{tahun}}
-									</v-chip>	
-									<v-menu offset-y>
+									</v-chip>
+									<v-menu v-if="aktif.authstatus == 'admin'" offset-y>
+										<template v-slot:activator="{ on }">
+											<v-btn class="mx-1 mb-3 blue-grey lighten-5 blue-grey--text" v-on="on" small depressed>
+												<span>{{penagih_terpilih.nama}}</span>
+											</v-btn>
+										</template>
+										<v-list>
+											<v-list-item v-for="(item, index) in penagih_tersedia" :key="index" @click="setPenagih(item)">
+												<v-list-item-title >{{ item.nama }}</v-list-item-title>
+											</v-list-item>
+											<v-list-item @click="setPenagih({nama:'Semua penagih'})">
+												<v-list-item-title>Semua penagih</v-list-item-title>
+											</v-list-item>
+										</v-list>
+									</v-menu>	
+									<v-menu v-if="aktif.authstatus == 'admin'" offset-y>
 										<template v-slot:activator="{ on }">
 											<v-btn class="mx-1 mb-3 blue-grey lighten-5 blue-grey--text" v-on="on" small depressed>
 												<span>{{dusun}}</span>
@@ -113,7 +137,7 @@
 											</v-list-item>
 										</v-list>
 									</v-menu>
-									<v-menu offset-y>
+									<v-menu v-if="aktif.authstatus == 'admin'" offset-y>
 										<template v-slot:activator="{ on }">
 											<v-btn class="mx-1 mb-3 blue-grey lighten-5 blue-grey--text" v-on="on" small depressed>
 												<span v-if="rt == 'Semua rt'">{{rt}}</span>
@@ -300,7 +324,7 @@
 								</v-row>
 							</v-card-title>
 							<v-card-text>
-								{{data_pelanggan}}
+								
 								<v-card class="pa-1" flat v-for="d in data_tampil" :key="d.id">
 									<v-layout row wrap class="pa-2 item-list">
 										<v-flex xs12 md4 lg4>
@@ -390,12 +414,23 @@ export default {
 			tahun : new Date().getFullYear(),
 			bulan : new Date().getMonth(),
 			bulan_pembayaran : new Date().getMonth()-1,
+			aktif : {},
+			penagih_tersedia : [],
+			penagih_terpilih : {nama : 'Semua penagih'}
 		};
 	},
 	methods: {
 		setDusun(dusun){
 			this.dusun = dusun.nama
+			this.penagih_terpilih = {nama : 'Semua penagih'}
 			this.pilihRtTersedia(dusun)
+			this.rt = 'Semua rt'
+			this.loadData()
+		},
+		setPenagih(penagih){
+			this.penagih_terpilih = penagih
+			this.dusun = 'Semua dusun'
+			this.pilihRtTersedia(this.dusun)
 			this.rt = 'Semua rt'
 			this.loadData()
 		},
@@ -502,52 +537,128 @@ export default {
 			this.info = info;
 			this.snackbar = true;
 		},
+		loadDataPenagih(){
+			db.collection("penagih")
+				.where('authstatus', '==', 'penagih')
+				.get()
+				.then(querysnapshot => {
+					var arrTampunganPenagih = []
+					querysnapshot.forEach(doc => {
+						var ob = {
+							id : doc.id,
+							nama : doc.data().nama,
+						}
+						arrTampunganPenagih.push(ob);
+					});
+					this.penagih_tersedia = arrTampunganPenagih
+				});		
+		},
 		loadData() {
 			this.show = true;
 			var arrTampungan = [];
-			db.collection("pelanggan").orderBy("pembayaran_terakhir", "desc").get().then(querysnapshot => {
+			db.collection('penagih').where('email', '==', firebase.auth().currentUser.email).get().then((querysnapshot) => {
 				querysnapshot.forEach(doc => {
-					var arrpembayaran = [];
-					doc.data().pembayaran.forEach(el => {
-						const pb = {
-							tahun: el.tahun,
-							bulan: el.bulan,
-							no_bulan: el.no_bulan,
-							lunas: el.lunas,
-							tanggal_bayar: el.tanggal_bayar,
-							harga : el.harga
-						};
-						arrpembayaran.push(pb);
-					});
-					const dd = {
-						id: doc.id,
-						nama: doc.data().nama,
-						nik: doc.data().nik,
-						dusun: doc.data().dusun,
-						rt: doc.data().rt,
-						rw: doc.data().rw,
-						jenis : doc.data().jenis,
-						lunas: doc.data().lunas,
-						telepon: doc.data().telepon,
-						pembayaran_terakhir: doc.data().pembayaran_terakhir,
-						tanggal_masuk: doc.data().tanggal_masuk,
-						pembayaran: arrpembayaran,
-					};
-					arrTampungan.push(dd);
-				});
-				if(this.dusun == 'Semua dusun' && this.rt == 'Semua rt') {
-						this.data_pelanggan = arrTampungan
-					}else if(this.dusun != 'Semua dusun' && this.rt == 'Semua rt' ){
-						this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun)
-					}else if(this.dusun != 'Semua dusun' && this.rt != 'Semua rt' ){
-						this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun && p['rt'] == this.rt)
+					this.aktif = doc.data()
+					this.aktif.id = doc.id				
+					if (this.aktif.authstatus == 'admin'){
+			
+						db.collection("pelanggan").orderBy("pembayaran_terakhir", "desc").get().then(querysnapshot => {
+							querysnapshot.forEach(doc => {
+								var arrpembayaran = [];
+								doc.data().pembayaran.forEach(el => {
+									const pb = {
+										tahun: el.tahun,
+										bulan: el.bulan,
+										no_bulan: el.no_bulan,
+										lunas: el.lunas,
+										tanggal_bayar: el.tanggal_bayar,
+										harga : el.harga
+									};
+									arrpembayaran.push(pb);
+								});
+								const dd = {
+									id: doc.id,
+									nama: doc.data().nama,
+									nik: doc.data().nik,
+									dusun: doc.data().dusun,
+									rt: doc.data().rt,
+									rw: doc.data().rw,
+									jenis : doc.data().jenis,
+									lunas: doc.data().lunas,
+									telepon: doc.data().telepon,
+									penagih : doc.data().penagih,
+									pembayaran_terakhir: doc.data().pembayaran_terakhir,
+									tanggal_masuk: doc.data().tanggal_masuk,
+									pembayaran: arrpembayaran,
+								};
+								arrTampungan.push(dd);
+							});
+								if(this.penagih_terpilih.nama == 'Semua penagih' && this.dusun == 'Semua dusun' && this.rt == 'Semua rt'){
+									this.data_pelanggan = arrTampungan
+								}else if(this.penagih_terpilih.nama != 'Semua penagih' && this.dusun == 'Semua dusun' && this.rt == 'Semua rt') {
+									this.data_pelanggan = arrTampungan.filter(p=>p['penagih'] == this.penagih_terpilih.id)
+								}else if(this.penagih_terpilih.nama == 'Semua penagih' && this.dusun != 'Semua dusun' && this.rt == 'Semua rt'){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun)
+								}else if(this.penagih_terpilih.nama == 'Semua penagih' && this.dusun != 'Semua dusun' && this.rt != 'Semua rt'){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun && p['rt'] == this.rt)
+								}
+							this.data_pembayaran = this.filterQuery(this.data_pelanggan, this.ambilNamaBulan(this.bulan_pembayaran))		
+							this.data_tampil = this.data_pembayaran	
+							this.loadDataPenagih()	
+							this.show = false;
+							this.sort = false
+						});
+					}else{
+						db.collection("pelanggan")
+							// .orderBy("pembayaran_terakhir", "desc")
+							.where('penagih', '==', doc.id)
+							.get().then(querysnapshot => {
+							querysnapshot.forEach(doc => {
+								var arrpembayaran = [];
+								doc.data().pembayaran.forEach(el => {
+									const pb = {
+										tahun: el.tahun,
+										bulan: el.bulan,
+										no_bulan: el.no_bulan,
+										lunas: el.lunas,
+										tanggal_bayar: el.tanggal_bayar,
+										harga : el.harga
+									};
+									arrpembayaran.push(pb);
+								});
+								const dd = {
+									id: doc.id,
+									nama: doc.data().nama,
+									nik: doc.data().nik,
+									dusun: doc.data().dusun,
+									rt: doc.data().rt,
+									rw: doc.data().rw,
+									jenis : doc.data().jenis,
+									lunas: doc.data().lunas,
+									telepon: doc.data().telepon,
+									penagih : doc.data().penagih,
+									pembayaran_terakhir: doc.data().pembayaran_terakhir,
+									tanggal_masuk: doc.data().tanggal_masuk,
+									pembayaran: arrpembayaran,
+								};
+								arrTampungan.push(dd);
+							});
+							if(this.dusun == 'Semua dusun' && this.rt == 'Semua rt') {
+									this.data_pelanggan = arrTampungan
+								}else if(this.dusun != 'Semua dusun' && this.rt == 'Semua rt' ){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun)
+								}else if(this.dusun != 'Semua dusun' && this.rt != 'Semua rt' ){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun && p['rt'] == this.rt)
+								}
+							this.data_pembayaran = this.filterQuery(this.data_pelanggan, this.ambilNamaBulan(this.bulan_pembayaran))		
+							this.data_tampil = this.data_pembayaran	
+							this.loadDataPenagih()	
+							this.show = false;
+							this.sort = false
+						});
 					}
-				this.data_pembayaran = this.filterQuery(this.data_pelanggan, this.ambilNamaBulan(this.bulan_pembayaran))		
-				this.data_tampil = this.data_pembayaran		
-				this.show = false;
-				this.sort = false
-			});
-		
+				})
+			})
 		},
 		filterQuery(arr, bulan) {
 			var hasilFilter = [];

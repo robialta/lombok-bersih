@@ -211,7 +211,30 @@
 						<v-card flat>
 							<v-card-title>
 								<v-row class>
-									<v-menu offset-y>
+									<v-chip
+										style="height:28px"
+										class="mx-1 mb-3"
+										color="primary"
+										label
+										>
+										{{aktif.authstatus}} 
+									</v-chip>	
+									<v-menu v-if="aktif.authstatus == 'admin'" offset-y>
+										<template v-slot:activator="{ on }">
+											<v-btn class="mx-1 mb-3 blue-grey lighten-5 blue-grey--text" v-on="on" small depressed>
+												<span>{{penagih_terpilih.nama}}</span>
+											</v-btn>
+										</template>
+										<v-list>
+											<v-list-item v-for="(item, index) in penagih_tersedia" :key="index" @click="setPenagih(item)">
+												<v-list-item-title >{{ item.nama }}</v-list-item-title>
+											</v-list-item>
+											<v-list-item @click="setPenagih({nama:'Semua penagih'})">
+												<v-list-item-title>Semua penagih</v-list-item-title>
+											</v-list-item>
+										</v-list>
+									</v-menu>
+									<v-menu v-if="aktif.authstatus == 'admin'" offset-y>
 										<template v-slot:activator="{ on }">
 											<v-btn class="mx-1 mb-3 blue-grey lighten-5 blue-grey--text" v-on="on" small depressed>
 												<span>{{dusun}}</span>
@@ -226,7 +249,7 @@
 											</v-list-item>
 										</v-list>
 									</v-menu>
-									<v-menu offset-y>
+									<v-menu v-if="aktif.authstatus == 'admin'" offset-y>
 										<template v-slot:activator="{ on }">
 											<v-btn class="mx-1 mb-3 blue-grey lighten-5 blue-grey--text" v-on="on" small depressed>
 												<span v-if="rt == 'Semua rt'">{{rt}}</span>
@@ -310,6 +333,8 @@
 import AppBar from './AppBar'
 import Loader from "./Loader";
 import db from "./../firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
   export default {
 	name : "Tagihan",
 	components: {
@@ -343,7 +368,10 @@ import db from "./../firebase";
 		penerima : [],
 		pesan : '',
 		tombolKirimDsbld : true,
-		sedangMengirim : false
+		sedangMengirim : false,
+		penagih_tersedia : [],
+		penagih_terpilih : {nama : 'Semua penagih'},
+		aktif : {}
       }
     },
     methods: {
@@ -354,52 +382,119 @@ import db from "./../firebase";
 		loadData() {
 			this.show = true;
 			var arrTampungan = [];
-			db.collection("pelanggan").orderBy("pembayaran_terakhir", "desc").get().then(querysnapshot => {
+			db.collection('penagih').where('email', '==', firebase.auth().currentUser.email).get().then((querysnapshot) => {
 				querysnapshot.forEach(doc => {
-					var arrpembayaran = [];
-					doc.data().pembayaran.forEach(el => {
-						const pb = {
-							tahun: el.tahun,
-							bulan: el.bulan,
-							no_bulan: el.no_bulan,
-							lunas: el.lunas,
-							tanggal_bayar: el.tanggal_bayar,
-							harga : el.harga
-						};
-						arrpembayaran.push(pb);
-					});
-					var tgl_bayar = doc.data().pembayaran.length < 1?new Date(doc.data().tanggal_masuk.seconds*1000):new Date(doc.data().pembayaran_terakhir)
-					var selisih = (new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+10).getTime() - tgl_bayar.getTime()) /86400000
-					var tonggakan = doc.data().pembayaran.length < 1?Math.ceil((selisih-9)/30):Math.ceil((selisih-31)/30)
-					const dd = {
-						id: doc.id,
-						nama: doc.data().nama,
-						nik: doc.data().nik,
-						dusun: doc.data().dusun,
-						rt: doc.data().rt,
-						rw: doc.data().rw,
-						jenis : doc.data().jenis,
-						lunas: doc.data().lunas,
-						telepon: doc.data().telepon,
-						pembayaran_terakhir: doc.data().pembayaran_terakhir,
-						tanggal_masuk: doc.data().tanggal_masuk,
-						tonggakan : tonggakan,
-						pembayaran: arrpembayaran
-					};
-					arrTampungan.push(dd);
-				});
-				if(this.dusun == 'Semua dusun' && this.rt == 'Semua rt') {
-						this.data_pelanggan = arrTampungan
-					}else if(this.dusun != 'Semua dusun' && this.rt == 'Semua rt' ){
-						this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun)
-					}else if(this.dusun != 'Semua dusun' && this.rt != 'Semua rt' ){
-						this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun && p['rt'] == this.rt)
+					this.aktif = doc.data()
+					this.aktif.id = doc.id				
+					if (this.aktif.authstatus == 'admin'){
+			
+						db.collection("pelanggan").orderBy("pembayaran_terakhir", "desc").get().then(querysnapshot => {
+							querysnapshot.forEach(doc => {
+								var arrpembayaran = [];
+								doc.data().pembayaran.forEach(el => {
+									const pb = {
+										tahun: el.tahun,
+										bulan: el.bulan,
+										no_bulan: el.no_bulan,
+										lunas: el.lunas,
+										tanggal_bayar: el.tanggal_bayar,
+										harga : el.harga
+									};
+									arrpembayaran.push(pb);
+								});
+								var tgl_bayar = doc.data().pembayaran.length < 1?new Date(doc.data().tanggal_masuk.seconds*1000):new Date(doc.data().pembayaran_terakhir)
+								var selisih = (new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+10).getTime() - tgl_bayar.getTime()) /86400000
+								var tonggakan = doc.data().pembayaran.length < 1?Math.ceil((selisih-9)/30):Math.ceil((selisih-31)/30)
+								const dd = {
+									id: doc.id,
+									nama: doc.data().nama,
+									nik: doc.data().nik,
+									dusun: doc.data().dusun,
+									rt: doc.data().rt,
+									rw: doc.data().rw,
+									jenis : doc.data().jenis,
+									lunas: doc.data().lunas,
+									telepon: doc.data().telepon,
+									penagih : doc.data().penagih,
+									pembayaran_terakhir: doc.data().pembayaran_terakhir,
+									tanggal_masuk: doc.data().tanggal_masuk,
+									tonggakan : tonggakan,
+									pembayaran: arrpembayaran
+								};
+								arrTampungan.push(dd);
+							});
+								if(this.penagih_terpilih.nama == 'Semua penagih' && this.dusun == 'Semua dusun' && this.rt == 'Semua rt'){
+									this.data_pelanggan = arrTampungan
+								}else if(this.penagih_terpilih.nama != 'Semua penagih' && this.dusun == 'Semua dusun' && this.rt == 'Semua rt') {
+									this.data_pelanggan = arrTampungan.filter(p=>p['penagih'] == this.penagih_terpilih.id)
+								}else if(this.penagih_terpilih.nama == 'Semua penagih' && this.dusun != 'Semua dusun' && this.rt == 'Semua rt'){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun)
+								}else if(this.penagih_terpilih.nama == 'Semua penagih' && this.dusun != 'Semua dusun' && this.rt != 'Semua rt'){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun && p['rt'] == this.rt)
+								}
+								this.data_tagihan = this.filterQuery(this.data_pelanggan)		
+								this.data_tampil = this.data_tagihan	
+								this.loadDataPenagih();
+								this.loadDataDusun();		
+								this.show = false;
+								this.sort = false
+						});
+					}else{
+						db.collection("pelanggan")
+						// .orderBy("pembayaran_terakhir", "desc")
+						.where('penagih', '==', doc.id)
+						.get().then(querysnapshot => {
+							querysnapshot.forEach(doc => {
+								var arrpembayaran = [];
+								doc.data().pembayaran.forEach(el => {
+									const pb = {
+										tahun: el.tahun,
+										bulan: el.bulan,
+										no_bulan: el.no_bulan,
+										lunas: el.lunas,
+										tanggal_bayar: el.tanggal_bayar,
+										harga : el.harga
+									};
+									arrpembayaran.push(pb);
+								});
+								var tgl_bayar = doc.data().pembayaran.length < 1?new Date(doc.data().tanggal_masuk.seconds*1000):new Date(doc.data().pembayaran_terakhir)
+								var selisih = (new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+10).getTime() - tgl_bayar.getTime()) /86400000
+								var tonggakan = doc.data().pembayaran.length < 1?Math.ceil((selisih-9)/30):Math.ceil((selisih-31)/30)
+								const dd = {
+									id: doc.id,
+									nama: doc.data().nama,
+									nik: doc.data().nik,
+									dusun: doc.data().dusun,
+									rt: doc.data().rt,
+									rw: doc.data().rw,
+									jenis : doc.data().jenis,
+									lunas: doc.data().lunas,
+									telepon: doc.data().telepon,
+									penagih : doc.data().penagih,
+									pembayaran_terakhir: doc.data().pembayaran_terakhir,
+									tanggal_masuk: doc.data().tanggal_masuk,
+									tonggakan : tonggakan,
+									pembayaran: arrpembayaran
+								};
+								arrTampungan.push(dd);
+							});
+							if(this.dusun == 'Semua dusun' && this.rt == 'Semua rt') {
+									this.data_pelanggan = arrTampungan
+								}else if(this.dusun != 'Semua dusun' && this.rt == 'Semua rt' ){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun)
+								}else if(this.dusun != 'Semua dusun' && this.rt != 'Semua rt' ){
+									this.data_pelanggan = arrTampungan.filter(p=>p['dusun'] == this.dusun && p['rt'] == this.rt)
+								}
+								this.data_tagihan = this.filterQuery(this.data_pelanggan)		
+								this.data_tampil = this.data_tagihan	
+								this.loadDataPenagih();
+								this.loadDataDusun();		
+								this.show = false;
+								this.sort = false
+						});
 					}
-				this.data_tagihan = this.filterQuery(this.data_pelanggan)		
-				this.data_tampil = this.data_tagihan		
-				this.show = false;
-				this.sort = false
-			});
+				})
+			})
 		},
 		loadDataDusun() {
 			db.collection("dusun")
@@ -416,9 +511,33 @@ import db from "./../firebase";
 					this.dusuns = arrTampunganDusun
 				});		
 		},
+		loadDataPenagih(){
+			db.collection("penagih")
+				.where('authstatus', '==', 'penagih')
+				.get()
+				.then(querysnapshot => {
+					var arrTampunganPenagih = []
+					querysnapshot.forEach(doc => {
+						var ob = {
+							id : doc.id,
+							nama : doc.data().nama,
+						}
+						arrTampunganPenagih.push(ob);
+					});
+					this.penagih_tersedia = arrTampunganPenagih
+				});		
+		},
 		setDusun(dusun){
 			this.dusun = dusun.nama
+			this.penagih_terpilih = {nama : 'Semua penagih'}
 			this.pilihRtTersedia(dusun)
+			this.rt = 'Semua rt'
+			this.loadData()
+		},
+		setPenagih(penagih){
+			this.penagih_terpilih = penagih
+			this.dusun = 'Semua dusun'
+			this.pilihRtTersedia(this.dusun)
 			this.rt = 'Semua rt'
 			this.loadData()
 		},
@@ -483,7 +602,6 @@ import db from "./../firebase";
     },
     created(){
 		this.loadData()
-		this.loadDataDusun()
 	},
 	
   }

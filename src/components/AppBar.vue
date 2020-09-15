@@ -6,6 +6,12 @@
       color="white"
       fixed
     >
+    <v-app-bar-nav-icon>
+          
+          <router-link to="/">
+                    <v-img src="../assets/logo.png" class="gmbr" max-height="60" max-width="60"></v-img>
+                    </router-link>
+      </v-app-bar-nav-icon>
       <v-toolbar-title >
         <span  class="lombok">LOMBOK </span> 
         <span class="bersih">BERSIH </span>   
