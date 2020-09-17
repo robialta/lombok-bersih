@@ -830,7 +830,7 @@ export default {
 	top: -10%;
 	width: 100%;
 	height: 110%;
-	background: #ffffffde;
+	background: #ffffff;
 	padding-top: 300px;
 }
 

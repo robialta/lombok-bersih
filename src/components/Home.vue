@@ -1,5 +1,8 @@
 <template>
     <div class="home">
+        <div class="loading-wrap text-center" v-show="show">
+                <Loader></Loader>
+            </div>
          <section class="nav">
             <v-container >
                 <v-toolbar 
@@ -9,8 +12,9 @@
                     <v-app-bar-nav-icon>
                         <v-img src="../assets/logo.png" class="gmbr" max-height="60" max-width="60"></v-img>
                     </v-app-bar-nav-icon>
-                    <v-toolbar-title>
-                    LOMBOK BERSIH
+                    <v-toolbar-title class="">
+                        <span  class="lombok">LOMBOK </span> 
+				        <span class="bersih">BERSIH </span>  
                     </v-toolbar-title>
 
                     <v-spacer></v-spacer>
@@ -34,20 +38,6 @@
                 show-arrows-on-hover>
                 <v-carousel-item transition="fade-transition" reverse-transition="fade-transition" >
                     <v-sheet
-                        color="white"
-                        height="100%">
-                        <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center">
-                            <v-card flat class="">
-                                <v-img src="../assets/slide1.jpg" class="gmbr" ></v-img>               
-                            </v-card>
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item transition="fade-transition" reverse-transition="fade-transition" >
-                    <v-sheet
                         color="#cad4dd"
                         height="100%">
                         <v-row
@@ -55,7 +45,7 @@
                             align="center"
                             justify="center">
                             <v-card flat class="">
-                                <v-img src="../assets/slide3.jpg" class="gmbr" ></v-img>               
+                                <v-img src="../assets/slide1new.png" class="gmbr" ></v-img>               
                             </v-card>
                         </v-row>
                     </v-sheet>
@@ -69,7 +59,21 @@
                             align="center"
                             justify="center">
                             <v-card flat class="">
-                                <v-img src="../assets/slide2.jpg" class="gmbr" ></v-img>               
+                                <v-img src="../assets/slide2new.png" class="gmbr" ></v-img>               
+                            </v-card>
+                        </v-row>
+                    </v-sheet>
+                </v-carousel-item>
+                <v-carousel-item transition="fade-transition" reverse-transition="fade-transition" >
+                    <v-sheet
+                        color="white"
+                        height="100%">
+                        <v-row
+                            class="fill-height"
+                            align="center"
+                            justify="center">
+                            <v-card flat class="">
+                                <v-img src="../assets/slide3new.png" class="gmbr" ></v-img>               
                             </v-card>
                         </v-row>
                     </v-sheet>
@@ -107,49 +111,45 @@
             </v-flex>
             <v-flex xs12 >
                 <v-container >
-                    <v-layout row wrap align-center>
+                    <v-layout row wrap >
                         <v-flex class="box" xs12 md4 >
                             <v-card flat class="transparent">
                                 <v-card-text class="text-center">
-                                <v-img src="../assets/bersih.jpg" class="gmbr" max-height="60" max-width="60"></v-img>
+                                <v-img src="../assets/bersih.png" class="gmbr" max-height="60" max-width="60"></v-img>
                                 </v-card-text>
                                 <v-card-title primary-title class="layout justify-center">
                                 <div class="headline text-center">Lingkungan bersih</div>
                                 </v-card-title>
                                 <v-card-text>
-                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                                Dengan komitmen kami untuk mewujudkan lingkungan yang bersih dan untuk memberantas permasalahan sampah didesa kita tercinta LABUHAN LOMBOK 
+                                kami mengharap dukungan masyarakat untuk bersama-sama mendukung program lombok bersih demi lingkungan yang bersih dan sehat.
                                 </v-card-text>
                             </v-card>
                         </v-flex>
                         <v-flex class="box" xs12 md4>
                             <v-card flat class="transparent">
                                 <v-card-text class="text-center">
-                                <v-img src="../assets/world.jpg" class="gmbr" max-height="60" max-width="60"></v-img>
+                                <v-img src="../assets/world.png" class="gmbr" max-height="60" max-width="60"></v-img>
                                 </v-card-text>
                                 <v-card-title primary-title class="layout justify-center">
                                 <div class="headline">Hidup sehat</div>
                                 </v-card-title>
                                 <v-card-text>
-                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                                Mari jaga kesehatan keluarga kita dengan menjaga kebersihan lingkungan agar terhindar dari berbagai penyakit yang berasal 
+                                dari kotoran dan sampah yang membuat lingkungan tidak sehat.
                                 </v-card-text>
                             </v-card>
                         </v-flex>
                         <v-flex class="box" xs12 md4>
                             <v-card flat class="transparent">
                                 <v-card-text class="text-center">
-                                <v-img src="../assets/hemat.jpg" class="gmbr" max-height="60" max-width="60"></v-img>
+                                <v-img src="../assets/hemat.png" class="gmbr" max-height="60" max-width="60"></v-img>
                                 </v-card-text>
                                 <v-card-title primary-title class="layout justify-center">
                                 <div class="headline text-center">Hemat biaya berobat</div>
                                 </v-card-title>
                                 <v-card-text>
-                                Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                                Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                                Tidak ada sesuatu yang lebih mahal dari pada kesehatan jadi mari bersama-sama kita menghemat dengan menghindari penyakit. 
                                 </v-card-text>
                             </v-card>
                         </v-flex>
@@ -203,53 +203,132 @@
             </v-row>
         </section>
 
+        <section class="informasi px-2 pt-10 pb-5">
+            <v-flex xs12 sm12 class="">
+                <div class="text-center">
+                    <h2 class="headline" style="color : #004d6b">Apa itu program lombok bersih? </h2>
+                </div>
+            </v-flex>
+
+            <v-flex sm8 md6 class="text-center mx-auto">
+                <v-card flat class="">
+                    <v-card-text class="text-infor">
+                        Program lombok bersih adalah program pengankutan sampah masyarakat desa labuhan lombok <br>
+                        Petugas akan melakukan pengangkutan sampah setiap minggu <br>
+                        Dengan membayar iuran sebesar Rp. 10.000 perbulan
+                        Demi mewujudkan lingkungan yang bersih dan masyarakat desa labuhan lombok yang sehat <br>
+                        Tunggu apa lagi yuk buruan gabung <br>
+                        Untuk info lebih lanjut yuk hubungi kontak kami
+                    </v-card-text>
+                </v-card>
+            </v-flex>          
+             <v-flex xs12 sm12 class="pt-5">
+                <div class="text-center">
+                    <h2 class="headline" style="color : #004d6b">Dukungan dan kerjasama</h2>
+                </div>
+            </v-flex>
+            <v-flex class=" mx-auto" xs12 sm8 md6>
+                    <v-flex xs12 >
+                    <v-container >
+                        <v-layout row wrap align-center>
+                            <v-flex class="" sm6 md3 >
+                                <v-card flat class="transparent">
+                                    <v-card-text class="text-center">
+                                    <v-img src="../assets/taruna.png" class="gmbr" max-height="100" max-width="100"></v-img>
+                                    </v-card-text>
+                                    <v-card-title primary-title class="layout justify-center">
+                                    <!-- <div class="headline text-center">KARANG TARUNA TUNAS MARITIM LABUHAN LOMBOK</div> -->
+                                    </v-card-title>
+                                </v-card>
+                            </v-flex>
+                            <v-flex class="" sm6 md3>
+                                <v-card flat class="transparent">
+                                    <v-card-text class="text-center">
+                                    <v-img src="../assets/logo.png" class="gmbr" max-height="100" max-width="100"></v-img>
+                                    </v-card-text>
+                                    <v-card-title primary-title class="layout justify-center">
+                                    <!-- <div class="headline text-center">PEMERINTAH DESA LABUHAN LOMBOK</div> -->
+                                    </v-card-title>
+                                </v-card>
+                            </v-flex>
+                            <v-flex class="" sm6 md3>
+                                <v-card flat class="transparent">
+                                    <v-card-text class="text-center">
+                                    <v-img src="../assets/OIP.png" class="gmbr" max-height="100" max-width="100"></v-img>
+                                    </v-card-text>
+                                    <v-card-title primary-title class="layout justify-center">
+                                    <!-- <div class="headline text-center">FAKULTAS TEKNIK UNIVERSITAS HAMZANWADI</div> -->
+                                    </v-card-title>
+        
+                                </v-card>
+                            </v-flex>
+                            <v-flex class="" sm6 md3>
+                                <v-card flat class="transparent">
+                                    <v-card-text class="text-center">
+                                    <v-img src="../assets/desa.png" class="gmbr" max-height="100" max-width="100"></v-img>
+                                    </v-card-text>
+                                    <v-card-title primary-title class="layout justify-center">
+                                    <!-- <div class="headline text-center">FAKULTAS TEKNIK UNIVERSITAS HAMZANWADI</div> -->
+                                    </v-card-title>
+        
+                                </v-card>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-flex>
+            </v-flex>
+            
+        </section>
+
+        
+
         <section class="foot">
             <v-container grid-list-xl>
             <v-layout row wrap justify-center class="mt-12">
                 <v-flex xs12 sm4>
                 <v-card flat class="transparent white">
-                    <v-card-title primary-title class="layout justify-center">
-                    <div class="headline grey--text text-center">INFORMASI PROGRAM LOMBOK BERSIH</div>
-                    </v-card-title>
                     <v-card-text class="grey--text">
-                    Program LOMBOK BERSIH adalah program 
+                    Copyright <v-icon class="grey--text">copyright</v-icon> Fakultas Teknik Universitas Hamzanwadi 2020 <br><br>  
+                    Pemerintah Desa Labuhan Lombok <br>
+                    Karang taruna Tunas Maritim <br>
+                    Fakultas Teknik Universitas Hamzanwadi
                     </v-card-text>
                 </v-card>
                 </v-flex>
                 <v-flex xs12 sm4 offset-sm1>
                 <v-card flat class="transparent white">
-                    <v-card-title primary-title class="layout justify-center">
+                    <v-card-title primary-title class="layout ">
                     <div class="headline grey--text">KONTAK KAMI</div>
                     </v-card-title>
-                    <v-card-text class="grey--text">
-                    Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
+                    <v-card-text class="pa-0">                       
+                        <v-list class="transparent white">
+                            <v-list-item class="pa-0">
+                                <v-list-item-action>
+                                <v-icon class="grey--text text--lighten-2">mdi-phone</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                <v-list-item-title class="grey--text">777-867-5309</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item class="pa-0">
+                                <v-list-item-action>
+                                <v-icon class="grey--text text--lighten-2">mdi-map-marker</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                <v-list-item-title class="grey--text">Labuhan lombok, pringgabaya </v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item class="pa-0">
+                                <v-list-item-action>
+                                <v-icon class="grey--text text--lighten-2">mdi-email</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                <v-list-item-title class="grey--text">lblombokbersih@gmail.com</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
                     </v-card-text>
-                    <v-list class="transparent white">
-                    <v-list-item>
-                        <v-list-item-action>
-                        <v-icon class="blue--text text--lighten-2">mdi-phone</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                        <v-list-item-title class="grey--text">777-867-5309</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-action>
-                        <v-icon class="blue--text text--lighten-2">mdi-map-marker</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                        <v-list-item-title class="grey--text">Labuhan lombok, pringgabaya </v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-action>
-                        <v-icon class="blue--text text--lighten-2">mdi-email</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                        <v-list-item-title class="grey--text">lblombokbersih@gmail.com</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    </v-list>
+                    
                 </v-card>
                 </v-flex>
             </v-layout>
@@ -350,11 +429,16 @@
 
 <script>
 import db from '../firebase'
+import Loader from './Loader'
 export default {
     name : 'Home',
+    components : {
+       Loader 
+    },
     data(){
         return{
             data_pelanggan : [],
+            show : false,
             anggotadicari : "",
             munculListPembayar : false,
             pembayar : [],
@@ -479,24 +563,31 @@ export default {
 
 
 <style scoped>
+.loading-wrap {
+	z-index: 99;
+	position: fixed;
+	top: -10%;
+	width: 100%;
+	height: 110%;
+	background: #ffffff;
+	padding-top: 300px;
+}
 .home{
     position: relative;
     top : -116px;
 }
 
-  .lombok{
+   .lombok{
     font-family: 'Sedgwick Ave Display', cursive;
     color: #f01799;
-    font-size: 40px;
   
   }
   .bersih{
     font-family: 'Patrick Hand', cursive;
     color: #38cfe0;
     font-size: 20px;
-    text-shadow: 3px 3px 12px rgba(70, 240, 183, 0.58);
+    /* text-shadow: 3px 3px 12px rgba(70, 240, 183, 0.58); */
     padding-right: 5px;
-    font-size: 32px;
   }
 
   .shadow{
@@ -526,7 +617,7 @@ export default {
     background-size:cover;
 }
 .box{
-    background: white;
+    /* background: white; */
     box-sizing: border-box;
     border: 10px solid#e9f2fe;
     border-radius: 30px;
@@ -565,5 +656,22 @@ export default {
 .slider{
     position: relative;
     top: -60px;
+}
+.dukungan{
+    position: relative;
+    top: -60px;
+    background: white;
+}
+.informasi{
+    background-image: url('../assets/project.png');
+    /* max-height: 400px; */
+    background-size: inherit;
+    position: relative;
+    top: -60px;
+}
+.text-infor{
+    font-size: 18px;
+    /* text-shadow: #e40000 1px 2px 6px; */
+    color: blue;
 }
 </style>

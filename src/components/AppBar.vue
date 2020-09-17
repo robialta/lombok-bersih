@@ -15,7 +15,7 @@
       <v-toolbar-title >
         <span  class="lombok">LOMBOK </span> 
         <span class="bersih">BERSIH </span>   
-        </v-toolbar-title>
+      </v-toolbar-title>
       <div class="flex-grow-1"></div>
       
       <div class="tanggal">{{ tanggal }}</div>
@@ -52,8 +52,8 @@
           <v-tab to="/tagihan">Tagihan</v-tab>
           <v-tab  to="/pelanggan">Pelanggan</v-tab>
           <v-tab to="/laporan">Laporan </v-tab>
-          <v-tab v-show="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb 8uy48 3KIUJ(*_HUHyuh*8uh9YT*y7y8y89yYh9y98">Master </v-tab>
-          
+          <v-tab v-if="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb8uy483KIUJ">Master </v-tab>
+          <v-tab v-if="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb8uy48">Stat </v-tab>
         </v-tabs>     
       </template> 
     </v-app-bar> 
