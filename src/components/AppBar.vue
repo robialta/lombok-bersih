@@ -53,7 +53,7 @@
           <v-tab  to="/pelanggan">Pelanggan</v-tab>
           <v-tab to="/laporan">Laporan </v-tab>
           <v-tab v-if="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb8uy483KIUJ">Master </v-tab>
-          <v-tab v-if="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb8uy48">Stat </v-tab>
+          <!-- <v-tab v-if="user.authstatus=='admin'" to="/uhiphe734343798yubn3yhb8uy48">Stat </v-tab> -->
         </v-tabs>     
       </template> 
     </v-app-bar> 
